@@ -35,8 +35,8 @@ type App struct {
 
 func (app *App) Initialize() {
 	app.mux.HandleFunc("POST /mongodb", app.mongoService.Fetch)
-	app.mux.HandleFunc("POST /inmemory", app.inMemoryService.Store)
-	app.mux.HandleFunc("GET /inmemory", app.inMemoryService.Fetch)
+	app.mux.HandleFunc("POST /in-memory", app.inMemoryService.Store)
+	app.mux.HandleFunc("GET /in-memory", app.inMemoryService.Fetch)
 }
 
 func (app *App) Run() error {
