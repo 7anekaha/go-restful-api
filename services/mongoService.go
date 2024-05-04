@@ -15,7 +15,21 @@ import (
 
 var dbName string = os.Getenv("DB")
 var collectionName string = os.Getenv("COLLECTION")
-var uri string = os.Getenv("MONGO_URI")
+var uri = os.Getenv("MONGO_URI")
+
+
+func init(){
+	if dbName == "" {
+		dbName = "task17-db"
+	}
+	if collectionName == "" {
+		collectionName = "records"
+	}
+	if uri == "" {
+		uri = "mongodb://localhost:27017"
+	}
+}
+
 
 type ResponseCode uint8
 
@@ -44,6 +58,12 @@ func NewMongoService(ctx context.Context) *MongoService {
 
 	return &MongoService{
 		db: mongoClient,
+	}
+}
+
+func NewMongoServiceForTest(client *mongo.Client) *MongoService {
+	return &MongoService{
+		db: client,
 	}
 }
 
@@ -95,6 +115,7 @@ func (ms *MongoService) Fetch(w http.ResponseWriter, r *http.Request) {
 	}
 	cursor, err := ms.db.Database(dbName).Collection(collectionName).Find(r.Context(), filter)
 	if err != nil {
+		log.Println("Error fetching data from MongoDB", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -107,10 +128,12 @@ func (ms *MongoService) Fetch(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		log.Println(record.Key, record.Count)
 		var sum int
 		for _, count := range record.Count {
 			sum += count
 		}
+		log.Println("Sum of counts:", sum)
 		if sum >= requestPayload.MinCount && sum <= requestPayload.MaxCount {
 			recordPayload := MongoRecordPayload{
 				Key:        record.Key,
