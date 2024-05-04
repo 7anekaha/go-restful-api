@@ -7,12 +7,12 @@ import (
 )
 
 type InMemoryService struct {
-	db map[string]string
+	DB map[string]string
 }
 
 func NewInMemoryService() *InMemoryService {
 	return &InMemoryService{
-		db: map[string]string{},
+		DB: map[string]string{},
 	}
 }
 
@@ -24,7 +24,7 @@ func (ims *InMemoryService) Fetch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	value, ok := ims.db[key]
+	value, ok := ims.DB[key]
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		return
@@ -61,7 +61,7 @@ func (ims *InMemoryService) Store(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	ims.db[inMemoryPayload.Key] = inMemoryPayload.Value
+	ims.DB[inMemoryPayload.Key] = inMemoryPayload.Value
 
 	responseJson, err := json.Marshal(inMemoryPayload)
 	if err != nil {
