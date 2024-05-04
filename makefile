@@ -1,10 +1,7 @@
-build:
-	@go build -o bin/task17 main.go
-
 run:
-	@go run main.go
+	@docker-compose up --build
 
-all:
-	@go build -o bin/task17 main.go
-	@go run main.go
+test:
+	@go test -v ./services/...
+
 
