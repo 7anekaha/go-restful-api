@@ -1,6 +1,13 @@
 # TotalCoder - Assignment 17 - Rest API with MongoDB and InMemoryDB
-The assignment is to create a REST API with three endpoints using MongoDNB and InMemoryDB.
-Endoints:
+The assignment is to create a REST API with three endpoints using MongoDB and InMemoryDB.
+(In the assigment a mongo uri was provided but I used a docker container to run MongoDB instead.)
+
+Doing this assignment I learned:
+- How TestMain works in Go
+- How to use [testcontainers](https://golang.testcontainers.org/) to test MongoDB
+- How to overrride UnmarshalJSON to add a custom validation
+
+## Endoints:
 1. POST /mongodb - To fetch data from MongoDB
 Request Body:
 ```json
@@ -30,6 +37,10 @@ Response:
     ]
 }
 ```
+Code 0 means success and 1 means bad request.
+
+The message will be "Success" for code 0 and "Structure of the request body is not correct" or "Start date should be before end date and minCount should be less than maxCount" for code 1.
+
 2. GET /inmemory - To fetch data from InMemoryDB
 Request: "http://localhost:3000/inmemory/?key=active-tabs"
 Response:
@@ -55,9 +66,19 @@ Response:
 }
 ```
 
-# Steps to run the project
+## Requirements
+- Go 1.22
+- Docker
+- Docker Compose
+
+## Steps to run the project
 1. Clone the repository
 2. Compile and Run the project
 ```bash
 make run
+```
+
+## Test the project
+```bash
+make test
 ```
